@@ -1,5 +1,4 @@
 import React from "react";
-import User from "./User";
 import { Button } from "reactstrap";
 import auth from "../auth";
 import axios from "../api/axios";
@@ -25,8 +24,17 @@ class Homepage extends React.Component {
       console.log("error in fecthing data", error);
     }
   };
+  updateComponentPurchased = (index) => {
+    const { components } = this.state;
+    const quantity = components[index].quantity - 1;
+    if (quantity >= 0) {
+      components[index] = { ...components[index], quantity };
+      this.setState(components);
+    }
+  };
   render() {
     const { components } = this.state;
+    const { updateComponentPurchased } = this;
     return (
       <div
         style={{
@@ -37,8 +45,14 @@ class Homepage extends React.Component {
           alignItems: "center",
         }}
       >
-        {components.map((item) => (
-          <Item data={item} key={`${item._id}`} />
+        {components.map((item, index) => (
+          <Item
+            data={item}
+            key={index}
+            index={index}
+            updateComponentPurchased={updateComponentPurchased}
+            history={this.props.history}
+          />
         ))}
       </div>
     );

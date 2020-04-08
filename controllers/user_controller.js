@@ -1,6 +1,6 @@
 const User = require("../model/user");
 const bcrypt = require("bcryptjs");
-const config = require("../default/default.json");
+const config = require("../default/default.js");
 const jwt = require("jsonwebtoken");
 const Component = require("../model/components");
 module.exports.login = async function (req, res) {
@@ -12,6 +12,9 @@ module.exports.login = async function (req, res) {
     }
 
     let user = await User.findOne({ email: email });
+
+    console.log("jwt secret", config.jwtSecret);
+
     if (!user) return res.status(400).json({ msg: "User does not exist" });
     bcrypt.compare(password, user.password).then((isMatch) => {
       if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
@@ -20,7 +23,7 @@ module.exports.login = async function (req, res) {
           id: user.id,
         },
         config.jwtSecret,
-        { expiresIn: 3600 },
+        { expiresIn: 360000 },
         (err, token) => {
           if (err) throw err;
           console.log("successfully logged in");
@@ -95,10 +98,9 @@ module.exports.generateData = async function (req, res) {
         name,
         quantity,
       });
-      let count = Math.floor(Math.random() * 6);
+      let count = 5;
       while (count--) {
-        let randomItem =
-          randomData[Math.floor(Math.random() * (randomData.length + 1))];
+        let randomItem = randomData[count];
         if (randomItem) {
           newData.related.push(randomItem);
         }
@@ -121,7 +123,6 @@ module.exports.generateData = async function (req, res) {
 module.exports.giveComponents = async function (req, res) {
   try {
     const components = await Component.find({});
-    console.log("data we got here", components);
     return res.status(200).json({
       status: "successfully fetched data",
       components,
@@ -129,6 +130,45 @@ module.exports.giveComponents = async function (req, res) {
   } catch (error) {
     return res.status(400).json({
       error: "error in fetching components",
+    });
+  }
+};
+
+module.exports.purchaseComponents = async function (req, res) {
+  try {
+    console.log(req.user);
+    const component_id = req.params.cid;
+    const compoObject = await Component.findById(component_id);
+    const userObject = await User.findById(req.user.id);
+
+    userObject.purchased.push(compoObject);
+    compoObject.save();
+    compoObject.quantity -= 1;
+    userObject.save();
+    return res.status(200).json({
+      message: "Item purchased succesfully",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({
+      error: error,
+    });
+  }
+};
+
+module.exports.componentDetail = async function (req, res) {
+  try {
+    const component_id = req.params.cid;
+    const allData = await Component.findById(component_id).populate("related");
+    console.log("Get component data", allData);
+    return res.status(200).json({
+      data: allData,
+      message: "Item purchased succesfully",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({
+      error: error,
     });
   }
 };

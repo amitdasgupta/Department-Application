@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const config = require("../default/default.json");
+const config = require("../default/default.js");
 // mongoose.connect(config.mongoURI);
 mongoose.connect("mongodb://localhost/ordering_System");
 

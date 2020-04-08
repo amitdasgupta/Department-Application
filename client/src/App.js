@@ -6,6 +6,7 @@ import Homepage from "./components/Homepage";
 import { ProtectedRoute } from "./protected-route";
 import Signup from "./components/signup";
 import Signin from "./components/SignIn";
+import ComponentDetails from "./components/ComponetDetails";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 class App extends React.Component {
   render() {
@@ -15,6 +16,11 @@ class App extends React.Component {
         <Route path="/signup" component={Signup} />
         <Route path="/signin" component={Signin} />
         <ProtectedRoute exact path="/app" component={Homepage} />
+        <ProtectedRoute
+          exact
+          path="/app/component/:id"
+          component={ComponentDetails}
+        />
       </div>
     );
   }
