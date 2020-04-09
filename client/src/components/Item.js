@@ -9,7 +9,6 @@ export default function Item(props) {
   const buyIt = async (e) => {
     try {
       e.stopPropagation();
-      console.log("here is the quantity", quantity);
       await axios.get(`/api/user/purchase/${_id}`);
       updateComponentPurchased(index);
     } catch (err) {

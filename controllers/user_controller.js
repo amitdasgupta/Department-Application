@@ -3,17 +3,15 @@ const bcrypt = require("bcryptjs");
 const config = require("../default/default.js");
 const jwt = require("jsonwebtoken");
 const Component = require("../model/components");
+const orderMailer = require("../mailers/order_mailer");
 module.exports.login = async function (req, res) {
   try {
-    console.log("----------------------------->", req.body);
     const { email, password } = req.body;
     if (!email || !password) {
       return res.status(400).json({ msg: "please enter all the fileds" });
     }
 
     let user = await User.findOne({ email: email });
-
-    console.log("jwt secret", config.jwtSecret);
 
     if (!user) return res.status(400).json({ msg: "User does not exist" });
     bcrypt.compare(password, user.password).then((isMatch) => {
@@ -26,7 +24,6 @@ module.exports.login = async function (req, res) {
         { expiresIn: 360000 },
         (err, token) => {
           if (err) throw err;
-          console.log("successfully logged in");
           res.json({
             token,
             user: {
@@ -88,9 +85,7 @@ module.exports.register = async function (req, res) {
 
 module.exports.generateData = async function (req, res) {
   try {
-    console.log("krenga na");
     const randomData = await Component.aggregate([{ $sample: { size: 5 } }]);
-    console.log("data we got", randomData);
     for (let i = 0; i < 8; i++) {
       let name = Math.random().toString(36).substring(7);
       let quantity = Math.floor(Math.random() * 11) + 10;
@@ -136,15 +131,23 @@ module.exports.giveComponents = async function (req, res) {
 
 module.exports.purchaseComponents = async function (req, res) {
   try {
-    console.log(req.user);
     const component_id = req.params.cid;
     const compoObject = await Component.findById(component_id);
     const userObject = await User.findById(req.user.id);
-
     userObject.purchased.push(compoObject);
     compoObject.save();
     compoObject.quantity -= 1;
     userObject.save();
+    if (compoObject.quantity <= 2) {
+      const data = {
+        user: {
+          name: userObject.name,
+          email: userObject.email,
+        },
+        component: compoObject,
+      };
+      orderMailer.newOrderItem(data);
+    }
     return res.status(200).json({
       message: "Item purchased succesfully",
     });
@@ -159,8 +162,10 @@ module.exports.purchaseComponents = async function (req, res) {
 module.exports.componentDetail = async function (req, res) {
   try {
     const component_id = req.params.cid;
-    const allData = await Component.findById(component_id).populate("related");
-    console.log("Get component data", allData);
+    const allData = await Component.findById(component_id).populate({
+      path: "related",
+      options: { sort: { created_at: -1 } },
+    });
     return res.status(200).json({
       data: allData,
       message: "Item purchased succesfully",

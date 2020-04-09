@@ -30,6 +30,7 @@ class Signin extends React.Component {
       if (token) {
         auth.login(token, name);
         this.props.history.push("/app");
+        window.location.reload();
       }
     } catch (error) {
       console.log("error ocurred", error);
