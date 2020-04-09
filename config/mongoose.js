@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const config = require("../default/default.js");
-// mongoose.connect(config.mongoURI);
-mongoose.connect("mongodb://localhost/ordering_System");
+mongoose.connect(config.mongoURI);
+// mongoose.connect("mongodb://localhost/ordering_System");
 
 const db = mongoose.connection;
 // to console error messages

@@ -22,9 +22,12 @@ class Signup extends React.Component {
       const data = await axios.post("/api/user/register ", this.state);
       console.log(data);
       const {
-        data: { token },
+        data: {
+          token,
+          user: { name },
+        },
       } = data;
-      console.log("token", token);
+      console.log("token", token, name);
       if (token) {
         auth.login(token);
         this.props.history.push("/app");
