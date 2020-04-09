@@ -66,10 +66,26 @@ class NavbarCustom extends React.Component {
                   </>
                 ) : (
                   <>
-                    <Button onClick={this.authenticate("/signin")}>
+                    <Button
+                      onClick={this.authenticate("/signin")}
+                      style={{
+                        marginRight: "10px",
+                        width: "150px",
+                        marginTop: "10px",
+                        marginBottom: "10px",
+                      }}
+                    >
                       Sign In
                     </Button>
-                    <Button onClick={this.authenticate("/signup")}>
+                    <Button
+                      onClick={this.authenticate("/signup")}
+                      style={{
+                        marginRight: "10px",
+                        width: "150px",
+                        marginTop: "10px",
+                        marginBottom: "10px",
+                      }}
+                    >
                       Sign Up
                     </Button>
                   </>

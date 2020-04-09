@@ -19,14 +19,12 @@ class Signin extends React.Component {
     try {
       e.preventDefault();
       const data = await axios.post("/api/user/login", this.state);
-      console.log(data);
       const {
         data: {
           token,
           user: { name },
         },
       } = data;
-      console.log("token", token);
       if (token) {
         auth.login(token, name);
         this.props.history.push("/app");
@@ -45,7 +43,7 @@ class Signin extends React.Component {
   render() {
     return (
       <div className="App">
-        <Form onSubmit={this.handleSubmit}>
+        <Form onSubmit={this.handleSubmit} style={{ margin: "10px" }}>
           <FormGroup>
             <Label for="email">Email</Label>
             <Input

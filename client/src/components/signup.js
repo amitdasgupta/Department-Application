@@ -20,7 +20,6 @@ class Signup extends React.Component {
     try {
       e.preventDefault();
       const data = await axios.post("/api/user/register ", this.state);
-      console.log(data);
       const {
         data: {
           token,
@@ -44,10 +43,9 @@ class Signup extends React.Component {
   };
 
   render() {
-    console.log(this.state);
     return (
       <div className="App">
-        <Form onSubmit={this.handleSubmit}>
+        <Form onSubmit={this.handleSubmit} style={{ margin: "10px" }}>
           <FormGroup>
             <Label for="name">Name</Label>
             <Input
