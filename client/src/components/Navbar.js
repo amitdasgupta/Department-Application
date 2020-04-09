@@ -12,7 +12,7 @@ import {
 import React from "react";
 import axios from "../api/axios";
 import auth from "../auth";
-
+import "./common-style.css";
 class NavbarCustom extends React.Component {
   state = {
     isOpen: false,
@@ -47,10 +47,15 @@ class NavbarCustom extends React.Component {
               <Nav className="ml-auto" navbar>
                 {auth.isAuthenticated() ? (
                   <>
-                    <Button onClick={this.logout}>Logout</Button>
+                    <Button onClick={this.logout} className="links-style">
+                      Logout
+                    </Button>
+                    {/* I made this button to randomly generate items */}
                     <Button
                       onClick={this.generateComponents}
                       style={{ marginLeft: "1%", marginRight: "1%" }}
+                      className="links-style"
+                      style={{ display: "none" }}
                     >
                       Lets generate components
                     </Button>
@@ -68,23 +73,13 @@ class NavbarCustom extends React.Component {
                   <>
                     <Button
                       onClick={this.authenticate("/signin")}
-                      style={{
-                        marginRight: "10px",
-                        width: "150px",
-                        marginTop: "10px",
-                        marginBottom: "10px",
-                      }}
+                      className="links-style"
                     >
                       Sign In
                     </Button>
                     <Button
                       onClick={this.authenticate("/signup")}
-                      style={{
-                        marginRight: "10px",
-                        width: "150px",
-                        marginTop: "10px",
-                        marginBottom: "10px",
-                      }}
+                      className="links-style"
                     >
                       Sign Up
                     </Button>

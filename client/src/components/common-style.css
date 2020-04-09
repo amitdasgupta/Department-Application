@@ -20,3 +20,9 @@
 .item-out-of-stock {
   background-color: red !important;
 }
+.links-style {
+  margin-right: 10px;
+  width: 150px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
