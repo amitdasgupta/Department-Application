@@ -70,6 +70,7 @@ class ComponentDetails extends React.Component {
               width: "92%",
               margin: "auto",
             }}
+            className={quantity <= 0 ? "item-out-of-stock" : ""}
           >
             {quantity > 0 ? (
               <p>Present in stock:{`${quantity}`}</p>
