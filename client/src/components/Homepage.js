@@ -13,12 +13,10 @@ class Homepage extends React.Component {
   }
   getAllData = async () => {
     try {
-      console.log("I am fecthing data");
       const data = await axios.get("/api/user/allcomponents");
       const {
         data: { components },
       } = data;
-      console.log("data we got here", components);
       this.setState({ components });
     } catch (error) {
       console.log("error in fecthing data", error);

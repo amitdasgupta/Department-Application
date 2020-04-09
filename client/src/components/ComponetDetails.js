@@ -19,7 +19,6 @@ class ComponentDetails extends React.Component {
       const id = this.props.match.params.id;
       const dataW = await axios.get(`/api/user/componentpage/${id}`);
       const { data: { data } = {} } = dataW;
-      console.log("data we got here", data);
       this.setState({
         name: data.name,
         related: data.related,
@@ -54,7 +53,6 @@ class ComponentDetails extends React.Component {
   };
 
   render() {
-    console.log(this.state);
     const { updateComponentPurchased } = this;
     const { name, quantity, related } = this.state;
     return (

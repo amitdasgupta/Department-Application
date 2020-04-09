@@ -1,6 +1,5 @@
 class Auth {
   login(token, name) {
-    console.log("logged in");
     localStorage.setItem("name", name);
     localStorage.setItem("token", JSON.stringify(token));
   }
