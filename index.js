@@ -4,7 +4,7 @@ require("dotenv").config();
 const port = process.env.port || 8000;
 const app = express();
 const db = require("./config/mongoose");
-
+const path = require("path");
 app.use(bodyParser.json());
 
 app.use(function (req, res, next) {
@@ -32,6 +32,13 @@ app.use(function (req, res, next) {
 });
 
 app.use("/", require("./routes"));
+
+if (process.env.NODE_ENV == "production") {
+  app.use(express.static("clien/build"));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
 
 app.listen(port, function (err) {
   if (err) {
